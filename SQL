@@ -1,0 +1,65 @@
+-- Create database
+CREATE DATABASE store;
+
+-- create tables
+
+CREATE Table countries (
+country_code int primary key,
+name varchar(20) unique,
+continent_name varchar(20) not null
+);
+
+CREATE Table users (
+user_id int primary key,
+full_name varchar(20),
+email varchar(20) unique,
+gender char(1) check(gender='m' or gender='f'),
+date_of_birth varchar(20),
+created_at datetime,
+country_code int,
+foreign key(country_code) references countries (country_code)
+);
+
+
+
+CREATE Table orders (
+order_id int primary key,
+user_id int ,
+status varchar(6) check(status='start'  or status='finish'),
+created_at datetime,
+foreign key(user_id) references users (user_id)
+);
+
+CREATE Table products (
+product_id int primary key,
+name varchar(10) not null,
+price int default 0,
+status varchar(10) check(status='valid'  or status='expired') ,
+created_at datetime
+);
+
+CREATE Table order_products (
+order_id int,
+proudct_id int,
+quantity int default 0 ,
+primary key (order_id,product_id),
+foreign key (order_id) references orders(order_id),
+foreign key (product_id) references products(proudct_id)
+);
+
+-- alter
+alter table users modify column email varchar(20) unique;
+
+-- DML -insert
+insert into countries values (56, 'asir', 'SA'),(66, 'Riyadh', 'SA');
+insert into users values (1,'asma', 'asma.alkathiiri@gmail.com', 'f', 26-9-1998, 17-4-2022, 56);
+insert into orders values (1, 1,'start', 10-4-2022),(2, 1,'start', 17-4-2022);
+insert into products values (1,'VitC','20','valid',3-4-2022),(2,'VitB','28','valid',4-4-2022);
+insert into orders_products values (1,1,2),(2,2,1);
+
+-- DML - Update
+update countries set name='jazan' where country_code=56;
+-- DML - Delete
+delete from products where product_id=1;
+
+
